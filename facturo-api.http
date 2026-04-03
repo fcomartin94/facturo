@@ -1,0 +1,178 @@
+### Variables — cambia el token tras hacer login
+@baseUrl = http://localhost:8080/api
+@token = PEGA_TU_TOKEN_AQUI
+
+### ═══════════════════════════
+### AUTH
+### ═══════════════════════════
+
+### 1. Registrar nuevo autónomo
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "juan@autonomo.es",
+  "password": "password123",
+  "nombre": "Juan",
+  "apellidos": "García López",
+  "nif": "12345678A",
+  "direccion": "Calle Mayor 1",
+  "codigoPostal": "28001",
+  "ciudad": "Madrid",
+  "provincia": "Madrid",
+  "telefono": "600123456"
+}
+
+###
+
+### 2. Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@autonomo.es",
+  "password": "password123"
+}
+
+### ═══════════════════════════
+### CLIENTES
+### ═══════════════════════════
+
+### 3. Listar mis clientes
+GET {{baseUrl}}/clientes
+Authorization: Bearer {{token}}
+
+###
+
+### 4. Crear cliente
+POST {{baseUrl}}/clientes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Empresa S.L.",
+  "nif": "B12345678",
+  "email": "facturacion@empresa.es",
+  "telefono": "910000001",
+  "direccion": "Paseo de la Castellana 100",
+  "codigoPostal": "28046",
+  "ciudad": "Madrid",
+  "provincia": "Madrid",
+  "pais": "España"
+}
+
+###
+
+### 5. Obtener cliente por ID
+GET {{baseUrl}}/clientes/1
+Authorization: Bearer {{token}}
+
+###
+
+### 6. Actualizar cliente
+PUT {{baseUrl}}/clientes/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nombre": "Empresa Actualizada S.L.",
+  "nif": "B12345678",
+  "email": "nueva@empresa.es",
+  "telefono": "910000002",
+  "direccion": "Nueva Dirección 200",
+  "codigoPostal": "28050",
+  "ciudad": "Madrid",
+  "provincia": "Madrid",
+  "pais": "España"
+}
+
+###
+
+### 7. Eliminar cliente
+DELETE {{baseUrl}}/clientes/1
+Authorization: Bearer {{token}}
+
+### ═══════════════════════════
+### FACTURAS
+### ═══════════════════════════
+
+### 8. Listar mis facturas
+GET {{baseUrl}}/facturas
+Authorization: Bearer {{token}}
+
+###
+
+### 9. Crear factura (IVA 21%, IRPF 15% por defecto)
+POST {{baseUrl}}/facturas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "fechaEmision": "2024-12-01",
+  "fechaVencimiento": "2025-01-01",
+  "notas": "Pago en 30 días. Gracias por confiar en nuestros servicios.",
+  "lineas": [
+    {
+      "concepto": "Desarrollo de aplicación web",
+      "cantidad": 1,
+      "precioUnitario": 2500.00
+    },
+    {
+      "concepto": "Mantenimiento mensual",
+      "cantidad": 3,
+      "precioUnitario": 200.00
+    }
+  ]
+}
+
+###
+
+### 10. Crear factura con IRPF reducido (7% — primeros 2 años de actividad)
+POST {{baseUrl}}/facturas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "fechaEmision": "2024-12-15",
+  "porcentajeIva": 21,
+  "porcentajeIrpf": 7,
+  "lineas": [
+    {
+      "concepto": "Diseño gráfico corporativo",
+      "cantidad": 1,
+      "precioUnitario": 800.00
+    }
+  ]
+}
+
+###
+
+### 11. Obtener factura por ID
+GET {{baseUrl}}/facturas/1
+Authorization: Bearer {{token}}
+
+###
+
+### 12. Cambiar estado de factura (BORRADOR → EMITIDA)
+PATCH {{baseUrl}}/facturas/1/estado?estado=EMITIDA
+Authorization: Bearer {{token}}
+
+###
+
+### 13. Marcar factura como PAGADA
+PATCH {{baseUrl}}/facturas/1/estado?estado=PAGADA
+Authorization: Bearer {{token}}
+
+###
+
+### 14. Descargar PDF de la factura ⭐
+GET {{baseUrl}}/facturas/1/pdf
+Authorization: Bearer {{token}}
+
+###
+
+### 15. Eliminar factura (solo BORRADOR)
+DELETE {{baseUrl}}/facturas/1
+Authorization: Bearer {{token}}
