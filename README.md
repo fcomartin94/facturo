@@ -1,6 +1,7 @@
 # Facturo 🧾
 
 [![CI](https://github.com/fcomartin94/facturo/actions/workflows/ci.yml/badge.svg)](https://github.com/fcomartin94/facturo/actions/workflows/ci.yml)
+[![Abrir en GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/fcomartin94/facturo)
 
 Plataforma de facturación para autónomos. API REST construida con Java 21 + Spring Boot 3.
 
@@ -54,11 +55,12 @@ Hay un ejemplo comentado en `.env.example` (Spring Boot lee estas variables del 
 
 ## Probar en GitHub Codespaces
 
-1. En el repo de GitHub: **Code → Create codespace on main** (abre el Dev Container con Java 21 y Docker).
-2. Al crearse el entorno, se ejecuta `docker compose up -d` y un `compile` inicial. Si Postgres no estuviera listo, en la terminal: `docker compose up -d` y espera unos segundos.
-3. En la terminal del codespace: `./mvnw spring-boot:run`
-4. Abre el puerto **8080** (Codespaces lo enlaza automáticamente; si no, **Ports** → visibilidad *Public* para probar desde fuera).
-5. Usa `facturo-api.http` con la extensión REST Client o los mismos `curl` del archivo.
+[**Abrir en GitHub Codespaces**](https://codespaces.new/fcomartin94/facturo) (botón también arriba) — crea un entorno en el navegador con Java 21 y Docker; no hace falta instalar nada en local.
+
+1. Espera a que termine la configuración inicial (Postgres + compilación). Si Postgres no respondiera: `docker compose up -d` y unos segundos.
+2. En la terminal: `./mvnw spring-boot:run`
+3. Abre el puerto **8080** (Codespaces lo enlaza automáticamente; si no, **Ports** → visibilidad *Public* para probar desde fuera).
+4. Usa `facturo-api.http` con la extensión REST Client o los mismos `curl` del archivo.
 
 ## Testear la API
 
