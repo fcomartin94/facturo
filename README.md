@@ -57,8 +57,8 @@ Hay un ejemplo comentado en `.env.example` (Spring Boot lee estas variables del 
 
 [**Abrir en GitHub Codespaces**](https://codespaces.new/fcomartin94/facturo) (botón también arriba) — crea un entorno en el navegador con Java 21 y Docker; no hace falta instalar nada en local.
 
-1. Espera a que termine la configuración inicial (Postgres + compilación). Si Postgres no respondiera: `docker compose up -d` y unos segundos.
-2. En la terminal: `./mvnw spring-boot:run`
+1. Tras abrir el codespace, en la terminal levanta Postgres: `docker compose up -d` (espera unos segundos). La primera vez puedes compilar con `./mvnw -DskipTests compile` si quieres comprobar el build.
+2. Arranca la API: `./mvnw spring-boot:run`
 3. Abre el puerto **8080** (Codespaces lo enlaza automáticamente; si no, **Ports** → visibilidad *Public* para probar desde fuera).
 4. Usa `facturo-api.http` con la extensión REST Client o los mismos `curl` del archivo.
 

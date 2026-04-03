@@ -2,12 +2,12 @@
   "name": "Facturo API",
   "image": "mcr.microsoft.com/devcontainers/java:1-21-bookworm",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest",
-      "moby": true
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "moby": true,
+      "installDockerBuildx": false
     }
   },
-  "postCreateCommand": "chmod +x mvnw && docker compose -f docker-compose.yml up -d && sleep 4 && ./mvnw -q -DskipTests compile",
+  "postCreateCommand": "chmod +x mvnw",
   "forwardPorts": [8080, 5432],
   "portsAttributes": {
     "8080": {
