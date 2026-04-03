@@ -55,7 +55,7 @@ Hay un ejemplo comentado en `.env.example` (Spring Boot lee estas variables del 
 
 ## Probar en GitHub Codespaces
 
-[**Abrir en GitHub Codespaces**](https://codespaces.new/fcomartin94/facturo) (botón también arriba) — crea un entorno en el navegador con Java 21 y Docker; no hace falta instalar nada en local.
+[**Abrir en GitHub Codespaces**](https://codespaces.new/fcomartin94/facturo) (botón también arriba) — crea un entorno en el navegador con Java 21 y Docker; no hace falta instalar nada en local. Si el contenedor entrara en *recovery mode* tras un cambio en `.devcontainer`, usa **Rebuild Container** tras hacer `git pull`.
 
 1. Tras abrir el codespace, en la terminal levanta Postgres: `docker compose up -d` (espera unos segundos). La primera vez puedes compilar con `./mvnw -DskipTests compile` si quieres comprobar el build.
 2. Arranca la API: `./mvnw spring-boot:run`
