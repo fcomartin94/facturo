@@ -60,18 +60,39 @@ Hay un ejemplo comentado en `.env.example` (Spring Boot lee estas variables del 
 1. Tras abrir el codespace, en la terminal levanta Postgres: `docker compose up -d` (espera unos segundos). La primera vez puedes compilar con `./mvnw -DskipTests compile` si quieres comprobar el build.
 2. Arranca la API: `./mvnw spring-boot:run`
 3. Puertos **8080**: pestaña **Ports** → puerto **8080** → **Port visibility** → **Public**. Abre el enlace del puerto (icono de globo / “Open in browser”). La raíz **`/`** devuelve un JSON de bienvenida (200). Para comprobar seguridad: `curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/api/clientes` debe dar **401** sin token. Si el navegador sigue sin cargar, comprueba que la app está en marcha y que usas el **enlace actual** de Ports (cambia al reiniciar el codespace).
-4. Usa `facturo-api.http` con la extensión REST Client o los mismos `curl` del archivo.
+4. Sigue la **guía de prueba con `facturo-api.http`** (abajo).
 
-## Testear la API
+## Guía: probar la API con `facturo-api.http`
 
-Abre `facturo-api.http` en Cursor (o IntelliJ) y ejecuta los requests en orden:
+Con la API en marcha (`./mvnw spring-boot:run`) y Postgres arriba (`docker compose up -d`).
 
-1. **Registro** → `POST /api/auth/register`
-2. **Login** → `POST /api/auth/login` — copia el `token` de la respuesta
-3. Pega el token en la variable `@token` del archivo `.http`
-4. Crea un cliente → `POST /api/clientes`
-5. Crea una factura → `POST /api/facturas`
-6. Descarga el PDF → `GET /api/facturas/1/pdf` ⭐
+### 1. Instalar la extensión REST Client
+
+- En **Cursor** o **VS Code**: `Cmd+Shift+X` (extensiones) → busca **REST Client** → autor **Huachao Mao** → **Install**.
+- Si abriste esta carpeta como proyecto, puede salir un aviso *“Workspace recommends…”* por `.vscode/extensions.json`; acepta instalar.
+
+En **GitHub Codespaces** la devcontainer ya incluye esta extensión; no hace falta instalarla a mano.
+
+### 2. Abrir el archivo de peticiones
+
+Abre **`facturo-api.http`** en el editor. Encima de cada petición verás el enlace **`Send Request`** (a veces al pasar el ratón por la primera línea del bloque).
+
+### 3. Ejecutar en este orden
+
+| Paso | Qué hacer | Qué deberías ver |
+|------|-----------|------------------|
+| A | Pulsa **Send Request** en **“1. Registrar nuevo autónomo”** | Respuesta **201** con datos del usuario (o error si el email ya existe). |
+| B | **“2. Login”** | Respuesta **200** con un JSON que incluye **`token`**. |
+| C | Copia el valor de **`token`** (sin comillas). En la **línea 3** del archivo, deja `@token = eyJ...` (pega tu token). | — |
+| D | **“4. Crear cliente”** | **201** y el cliente creado (anota el **`id`**, suele ser `1`). |
+| E | **“9. Crear factura (IVA 21%…)”** | Asegúrate de que `"clienteId"` coincide con el cliente (p. ej. `1`). Respuesta **201** con totales. |
+| F | **“14. Descargar PDF”** | Se abre/descarga el PDF o ves datos binarios en el panel de respuesta. |
+
+Si algo falla con **401**, el token no está bien en `@token` o caducó: vuelve al paso **Login** (B) y actualiza `@token`.
+
+### 4. Comprobar en el navegador (opcional)
+
+Abre `http://localhost:8080/` (o el enlace **Public** del puerto 8080 en Codespaces): JSON de bienvenida **200**.
 
 ## Endpoints
 
