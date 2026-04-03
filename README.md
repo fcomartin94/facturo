@@ -59,7 +59,7 @@ Hay un ejemplo comentado en `.env.example` (Spring Boot lee estas variables del 
 
 1. Tras abrir el codespace, en la terminal levanta Postgres: `docker compose up -d` (espera unos segundos). La primera vez puedes compilar con `./mvnw -DskipTests compile` si quieres comprobar el build.
 2. Arranca la API: `./mvnw spring-boot:run`
-3. Puertos **8080**: en la pestaña **Ports**, haz clic en el puerto 8080 → **Port visibility** → **Public** (si no, el enlace `*.app.github.dev` desde Firefox/Chrome puede no conectar). Asegúrate de que la API ya está arrancada (`Started FacturoApplication` en la terminal). Prueba en la misma máquina: `curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/api/clientes` — debe responder **401** (sin token), no error de conexión.
+3. Puertos **8080**: pestaña **Ports** → puerto **8080** → **Port visibility** → **Public**. Abre el enlace del puerto (icono de globo / “Open in browser”). La raíz **`/`** devuelve un JSON de bienvenida (200). Para comprobar seguridad: `curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/api/clientes` debe dar **401** sin token. Si el navegador sigue sin cargar, comprueba que la app está en marcha y que usas el **enlace actual** de Ports (cambia al reiniciar el codespace).
 4. Usa `facturo-api.http` con la extensión REST Client o los mismos `curl` del archivo.
 
 ## Testear la API
