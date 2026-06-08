@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Facturo — Clientes</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav>
+  <a href="facturas.html">Facturas</a>
+  <a href="clientes.html" class="active">Clientes</a>
+  <span class="spacer"></span>
+  <span class="user" id="user-name"></span>
+  <button class="btn btn-sm" id="btn-logout" style="background:transparent;color:#94a3b8">Salir</button>
+</nav>
+<main>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+    <h1>Clientes</h1>
+    <button class="btn btn-primary" id="btn-new-cliente">+ Nuevo cliente</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th><th>NIF</th><th>Email</th><th>Teléfono</th><th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="clientes-tbody"></tbody>
+  </table>
+</main>
+
+<!-- Modal nuevo/editar cliente -->
+<div id="modal-cliente" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;z-index:100">
+  <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:32px;width:100%;max-width:460px">
+    <h2 id="modal-title" style="margin-bottom:20px;font-size:18px">Nuevo cliente</h2>
+    <form id="form-cliente">
+      <div class="form-group"><label>Nombre *</label><input id="c-nombre" required></div>
+      <div class="form-group"><label>NIF *</label><input id="c-nif" required></div>
+      <div class="form-group"><label>Email</label><input id="c-email" type="email"></div>
+      <div class="form-group"><label>Teléfono</label><input id="c-telefono"></div>
+      <p id="form-error" class="error-msg"></p>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button type="button" class="btn" id="btn-modal-close" style="background:#334155;color:#e2e8f0">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="module" src="js/clientes.js"></script>
+</body>
+</html>

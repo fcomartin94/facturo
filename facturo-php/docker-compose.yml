@@ -1,0 +1,22 @@
+version: '3.9'
+services:
+  postgres:
+    # Usamos la imagen oficial de PostgreSQL 16 de Docker Hub
+    image: postgres:16
+    container_name: facturo_postgres
+    # Crea automáticamente la base de datos facturo_db con el
+    # usuario y la contraseña indicados al arrancar el contenedor
+    # por primera vez. Mismos valores que se pondrán en el .env
+    environment:
+      POSTGRES_DB:        facturo_db
+      POSTGRES_USER:      facturo_user
+      POSTGRES_PASSWORD:  facturo_pass
+    ports:
+      # Puerto del contenedor al puerto de la máquina física
+      - "5432:5432"
+    # Persistimos los datos en un volumen de Docker
+    volumes:
+      - facturo_pg_data:/var/lib/postgresql/data
+
+volumes:
+  facturo_pg_data:

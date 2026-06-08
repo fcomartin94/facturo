@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# PHP
+facturo-php/vendor/
+facturo-php/.env
+facturo-php/*.pdf
+
+# Java
+facturo-java/target/
+facturo-java/.mvn/wrapper/maven-wrapper.jar
+facturo-java/*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment
+.env.local
+.env.production

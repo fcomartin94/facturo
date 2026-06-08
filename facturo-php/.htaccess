@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Redirigir todas las peticiones a index.php excepto ficheros/dirs existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Cabeceras CORS — ajustar origin en producción
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# Responder a OPTIONS (preflight) sin llegar a PHP
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^ - [L,R=204]
