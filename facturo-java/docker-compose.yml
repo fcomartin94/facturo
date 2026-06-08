@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: facturo_postgres
+    environment:
+      POSTGRES_DB: facturo_db
+      POSTGRES_USER: facturo_user
+      POSTGRES_PASSWORD: facturo_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - facturo_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U facturo_user -d facturo_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  facturo_data:

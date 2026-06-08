@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <style type="text/css">
+
+    /* ── Página ─────────────────────────────────────────────────────────── */
+    @page {
+      size: A4;
+      margin: 14mm 18mm 16mm 18mm;
+    }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 9pt;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Utilidades ─────────────────────────────────────────────────────── */
+    .w100  { width: 100%; }
+    .right { text-align: right; }
+    .left  { text-align: left; }
+    .center{ text-align: center; }
+    .muted { color: #64748b; }
+    .bold  { font-weight: bold; }
+    .small { font-size: 8pt; }
+
+    /* ── Cabecera ────────────────────────────────────────────────────────── */
+    #header {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20pt;
+    }
+    #header td {
+      vertical-align: top;
+      padding: 0;
+    }
+    #header .col-left  { width: 58%; }
+    #header .col-right { width: 42%; }
+
+    .autonomo-name {
+      font-size: 17pt;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 3pt;
+    }
+    .autonomo-nif {
+      font-size: 8pt;
+      color: #64748b;
+      margin-bottom: 2pt;
+    }
+    .autonomo-detail {
+      font-size: 8pt;
+      color: #374151;
+      margin-bottom: 1pt;
+    }
+
+    /* Caja de factura (derecha) */
+    .invoice-box {
+      background-color: #1e293b;
+      color: #ffffff;
+      padding: 14pt 16pt;
+      text-align: right;
+    }
+    .invoice-box .label {
+      font-size: 7pt;
+      letter-spacing: 2pt;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 3pt;
+    }
+    .invoice-box .number {
+      font-size: 16pt;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 10pt;
+    }
+    .invoice-box .meta {
+      font-size: 8pt;
+      color: #cbd5e1;
+      margin-bottom: 2pt;
+    }
+    .invoice-box .meta span {
+      color: #ffffff;
+      font-weight: bold;
+    }
+    .estado-badge {
+      display: inline-block;
+      margin-top: 6pt;
+      padding: 2pt 7pt;
+      background-color: #334155;
+      color: #e2e8f0;
+      font-size: 7pt;
+      letter-spacing: 1pt;
+      text-transform: uppercase;
+    }
+
+    /* ── Separador ───────────────────────────────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1.5pt solid #e2e8f0;
+      margin: 0 0 14pt 0;
+    }
+    .divider-thin {
+      border: none;
+      border-top: 0.5pt solid #e2e8f0;
+      margin: 10pt 0;
+    }
+
+    /* ── Sección "Facturar a" ─────────────────────────────────────────────── */
+    .bill-to-label {
+      font-size: 7pt;
+      font-weight: bold;
+      letter-spacing: 1.5pt;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 5pt;
+    }
+    .bill-to-name {
+      font-size: 11pt;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 2pt;
+    }
+    .bill-to-detail {
+      font-size: 8pt;
+      color: #374151;
+      margin-bottom: 1pt;
+    }
+
+    /* ── Tabla de líneas ────────────────────────────────────────────────── */
+    #lines-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16pt;
+      margin-bottom: 0;
+    }
+    #lines-table th {
+      background-color: #1e293b;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: bold;
+      letter-spacing: 0.5pt;
+      text-transform: uppercase;
+      padding: 7pt 9pt;
+    }
+    #lines-table td {
+      padding: 7pt 9pt;
+      font-size: 8.5pt;
+      border-bottom: 0.5pt solid #e2e8f0;
+      color: #1e293b;
+    }
+    #lines-table tr.alt td {
+      background-color: #f8fafc;
+    }
+    .col-concepto { width: 44%; text-align: left; }
+    .col-cantidad { width: 13%; text-align: right; }
+    .col-precio   { width: 21%; text-align: right; }
+    .col-importe  { width: 22%; text-align: right; }
+
+    /* ── Totales ────────────────────────────────────────────────────────── */
+    #totals-wrapper {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0;
+    }
+    #totals-wrapper .spacer { width: 52%; }
+    #totals-wrapper .totals-cell { width: 48%; vertical-align: top; }
+
+    #totals-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    #totals-table td {
+      padding: 4pt 9pt;
+      font-size: 8.5pt;
+    }
+    #totals-table .tot-label { color: #64748b; text-align: left; }
+    #totals-table .tot-value { text-align: right; font-weight: bold; color: #1e293b; }
+    #totals-table tr.subtotal td {
+      border-top: 0.5pt solid #e2e8f0;
+    }
+    #totals-table tr.total-row td {
+      background-color: #1e293b;
+      color: #ffffff;
+      font-size: 9.5pt;
+      font-weight: bold;
+      padding: 8pt 9pt;
+    }
+    #totals-table tr.total-row td.tot-label {
+      color: #cbd5e1;
+    }
+    #totals-table tr.total-row td.tot-value {
+      color: #ffffff;
+      font-size: 11pt;
+    }
+
+    /* ── Notas ──────────────────────────────────────────────────────────── */
+    .notes-section {
+      margin-top: 18pt;
+      padding: 10pt 12pt;
+      border-left: 3pt solid #e2e8f0;
+      background-color: #f8fafc;
+    }
+    .notes-label {
+      font-size: 7pt;
+      font-weight: bold;
+      letter-spacing: 1pt;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 4pt;
+    }
+    .notes-text {
+      font-size: 8.5pt;
+      color: #374151;
+    }
+
+    /* ── Pie de página ──────────────────────────────────────────────────── */
+    .footer {
+      margin-top: 24pt;
+      border-top: 0.5pt solid #e2e8f0;
+      padding-top: 7pt;
+      font-size: 7.5pt;
+      color: #94a3b8;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════ CABECERA ═══════════════════════ -->
+  <table id="header" class="w100">
+    <tr>
+      <!-- Izquierda: datos del autónomo -->
+      <td class="col-left">
+        <div class="autonomo-name"
+             th:text="${autonomo.nombre} + ' ' + ${autonomo.apellidos}">Nombre Apellidos</div>
+        <div class="autonomo-nif"
+             th:text="'NIF: ' + ${autonomo.nif}">NIF: 12345678A</div>
+        <div class="autonomo-detail" th:if="${autonomo.direccion != null}"
+             th:text="${autonomo.direccion}">Dirección</div>
+        <div class="autonomo-detail"
+             th:if="${autonomo.codigoPostal != null or autonomo.ciudad != null}"
+             th:text="${autonomo.codigoPostal != null ? autonomo.codigoPostal + ' ' : ''} + ${autonomo.ciudad != null ? autonomo.ciudad : ''}">
+          28001 Madrid
+        </div>
+        <div class="autonomo-detail" th:if="${autonomo.telefono != null}"
+             th:text="'Tel: ' + ${autonomo.telefono}">Tel: 600 000 000</div>
+        <div class="autonomo-detail"
+             th:text="${autonomo.email}">email@autonomo.es</div>
+      </td>
+
+      <!-- Derecha: caja de factura -->
+      <td class="col-right">
+        <div class="invoice-box">
+          <div class="label">Factura</div>
+          <div class="number" th:text="${factura.numeroFactura}">2024-001</div>
+          <div class="meta">
+            Fecha de emisión:&#160;
+            <span th:text="${#temporals.format(factura.fechaEmision, 'dd/MM/yyyy')}">01/12/2024</span>
+          </div>
+          <div class="meta" th:if="${factura.fechaVencimiento != null}">
+            Fecha de vencimiento:&#160;
+            <span th:text="${#temporals.format(factura.fechaVencimiento, 'dd/MM/yyyy')}">31/12/2024</span>
+          </div>
+          <div class="estado-badge" th:text="${factura.estado}">BORRADOR</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <hr class="divider"/>
+
+  <!-- ═══════════════════════ CLIENTE ════════════════════════ -->
+  <div class="bill-to-label">Facturar a</div>
+  <div class="bill-to-name"  th:text="${factura.cliente.nombre}">Empresa S.L.</div>
+  <div class="bill-to-detail" th:text="'NIF: ' + ${factura.cliente.nif}">NIF: B12345678</div>
+  <div class="bill-to-detail" th:if="${factura.cliente.direccion != null}"
+       th:text="${factura.cliente.direccion}">Calle Ejemplo, 1</div>
+  <div class="bill-to-detail"
+       th:if="${factura.cliente.codigoPostal != null or factura.cliente.ciudad != null}"
+       th:text="${factura.cliente.codigoPostal != null ? factura.cliente.codigoPostal + ' ' : ''} + ${factura.cliente.ciudad != null ? factura.cliente.ciudad : ''}">
+    28001 Madrid
+  </div>
+  <div class="bill-to-detail" th:if="${factura.cliente.email != null}"
+       th:text="${factura.cliente.email}">contacto@empresa.es</div>
+
+  <!-- ═══════════════════════ LÍNEAS ═════════════════════════ -->
+  <table id="lines-table" class="w100">
+    <thead>
+      <tr>
+        <th class="col-concepto left">Concepto</th>
+        <th class="col-cantidad right">Cantidad</th>
+        <th class="col-precio right">Precio unit.</th>
+        <th class="col-importe right">Importe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="linea, iterStat : ${factura.lineas}"
+          th:class="${iterStat.odd} ? 'alt' : ''">
+        <td class="col-concepto" th:text="${linea.concepto}">Concepto</td>
+        <td class="col-cantidad right"
+            th:text="${#numbers.formatDecimal(linea.cantidad, 0, 'POINT', 2, 'COMMA')}">1</td>
+        <td class="col-precio right"
+            th:text="${#numbers.formatDecimal(linea.precioUnitario, 0, 'POINT', 2, 'COMMA') + ' €'}">0,00 €</td>
+        <td class="col-importe right"
+            th:text="${#numbers.formatDecimal(linea.importe, 0, 'POINT', 2, 'COMMA') + ' €'}">0,00 €</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ═══════════════════════ TOTALES ════════════════════════ -->
+  <table id="totals-wrapper" class="w100">
+    <tr>
+      <td class="spacer"></td>
+      <td class="totals-cell">
+        <table id="totals-table" class="w100">
+          <tr>
+            <td class="tot-label">Base imponible</td>
+            <td class="tot-value"
+                th:text="${#numbers.formatDecimal(factura.baseImponible, 0, 'POINT', 2, 'COMMA') + ' €'}">
+              0,00 €
+            </td>
+          </tr>
+          <tr class="subtotal">
+            <td class="tot-label"
+                th:text="'IVA (' + ${factura.porcentajeIva} + '%)'">IVA (21%)</td>
+            <td class="tot-value"
+                th:text="${#numbers.formatDecimal(factura.cuotaIva, 0, 'POINT', 2, 'COMMA') + ' €'}">
+              0,00 €
+            </td>
+          </tr>
+          <tr>
+            <td class="tot-label"
+                th:text="'IRPF (−' + ${factura.porcentajeIrpf} + '%)'">IRPF (−15%)</td>
+            <td class="tot-value"
+                th:text="'−' + ${#numbers.formatDecimal(factura.cuotaIrpf, 0, 'POINT', 2, 'COMMA') + ' €'}">
+              −0,00 €
+            </td>
+          </tr>
+          <tr class="total-row">
+            <td class="tot-label">Total a pagar</td>
+            <td class="tot-value"
+                th:text="${#numbers.formatDecimal(factura.total, 0, 'POINT', 2, 'COMMA') + ' €'}">
+              0,00 €
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ═══════════════════════ NOTAS ══════════════════════════ -->
+  <div class="notes-section" th:if="${factura.notas != null and !#strings.isEmpty(factura.notas)}">
+    <div class="notes-label">Notas</div>
+    <div class="notes-text" th:text="${factura.notas}">Texto de notas.</div>
+  </div>
+
+  <!-- ═══════════════════════ PIE ════════════════════════════ -->
+  <div class="footer">
+    Documento generado automáticamente ·
+    <span th:text="${autonomo.nombre} + ' ' + ${autonomo.apellidos}">Nombre Apellidos</span>
+    · NIF <span th:text="${autonomo.nif}">12345678A</span>
+  </div>
+
+</body>
+</html>
